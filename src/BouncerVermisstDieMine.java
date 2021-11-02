@@ -31,19 +31,7 @@ public class BouncerVermisstDieMine extends BouncerApp {
             bouncer.move();
             if (bouncer.canMoveRight()) {
                 int depthOfCurrentShaft = measureDepth();
-                if (depthOfCurrentShaft > maxMeasuredDepth) {
-                    bouncer.paintField(FieldColor.BLUE);
-                    maxMeasuredDepth = depthOfCurrentShaft;
-                    if (firstShaftMarked == true) {
-                        bouncer.turnLeft();
-                        clearLastMarker();
-                    } else {
-                        firstShaftMarked = true;
-                        turnRight();
-                    }
-                } else {
-                    turnRight();
-                }
+                markShaftIfNecessary(depthOfCurrentShaft);
             }
         }
     }
@@ -51,7 +39,7 @@ public class BouncerVermisstDieMine extends BouncerApp {
     private int measureDepth() {
         int depth = 0;
         turnRight();
-        while(bouncer.canMoveForward()) {
+        while (bouncer.canMoveForward()) {
             bouncer.move();
             depth++;
         }
@@ -62,14 +50,30 @@ public class BouncerVermisstDieMine extends BouncerApp {
         return depth;
     }
 
+    private void markShaftIfNecessary(int lastMeasuredDepth) {
+        if (lastMeasuredDepth > maxMeasuredDepth) {
+            bouncer.paintField(FieldColor.BLUE);
+            maxMeasuredDepth = lastMeasuredDepth;
+            if (firstShaftMarked == true) {
+                bouncer.turnLeft();
+                clearLastMarker();
+            } else {
+                firstShaftMarked = true;
+                turnRight();
+            }
+        } else {
+            turnRight();
+        }
+    }
+
     private void clearLastMarker() {
         bouncer.move();
-        while(!bouncer.isOnFieldWithColor(FieldColor.BLUE)) {
+        while (!bouncer.isOnFieldWithColor(FieldColor.BLUE)) {
             bouncer.move();
         }
         bouncer.clearFieldColor();
         turnAround();
-        while(!bouncer.isOnFieldWithColor(FieldColor.BLUE)) {
+        while (!bouncer.isOnFieldWithColor(FieldColor.BLUE)) {
             bouncer.move();
         }
     }
