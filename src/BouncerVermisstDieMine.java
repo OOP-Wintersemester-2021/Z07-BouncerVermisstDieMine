@@ -1,5 +1,6 @@
 import de.ur.mi.bouncer.apps.BouncerApp;
 import de.ur.mi.bouncer.apps.BouncerLauncher;
+import de.ur.mi.bouncer.world.fields.FieldColor;
 
 
 /*
@@ -16,9 +17,71 @@ import de.ur.mi.bouncer.apps.BouncerLauncher;
  */
 public class BouncerVermisstDieMine extends BouncerApp {
 
+    private int maxMeasuredDepth = 0;
+    private boolean firstShaftMarked = false;
+
     @Override
     public void bounce() {
         loadMap("Mine");
+        findAndMarkDeepestShaft();
+    }
+
+    private void findAndMarkDeepestShaft() {
+        while (bouncer.canMoveForward()) {
+            bouncer.move();
+            if (bouncer.canMoveRight()) {
+                int depthOfCurrentShaft = measureDepth();
+                if (depthOfCurrentShaft > maxMeasuredDepth) {
+                    bouncer.paintField(FieldColor.BLUE);
+                    maxMeasuredDepth = depthOfCurrentShaft;
+                    if (firstShaftMarked == true) {
+                        bouncer.turnLeft();
+                        clearLastMarker();
+                    } else {
+                        firstShaftMarked = true;
+                        turnRight();
+                    }
+                } else {
+                    turnRight();
+                }
+            }
+        }
+    }
+
+    private int measureDepth() {
+        int depth = 0;
+        turnRight();
+        while(bouncer.canMoveForward()) {
+            bouncer.move();
+            depth++;
+        }
+        turnAround();
+        while (bouncer.canNotMoveRight()) {
+            bouncer.move();
+        }
+        return depth;
+    }
+
+    private void clearLastMarker() {
+        bouncer.move();
+        while(!bouncer.isOnFieldWithColor(FieldColor.BLUE)) {
+            bouncer.move();
+        }
+        bouncer.clearFieldColor();
+        turnAround();
+        while(!bouncer.isOnFieldWithColor(FieldColor.BLUE)) {
+            bouncer.move();
+        }
+    }
+
+    private void turnRight() {
+        turnAround();
+        bouncer.turnLeft();
+    }
+
+    private void turnAround() {
+        bouncer.turnLeft();
+        bouncer.turnLeft();
     }
 
     public static void main(String[] args) {

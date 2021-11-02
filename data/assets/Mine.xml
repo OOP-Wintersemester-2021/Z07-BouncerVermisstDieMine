@@ -37,6 +37,7 @@
 	<obstacle x="4" y="9" />
 
 	<obstacle x="5" y="14" />
+	<obstacle x="5" y="13" />
 
 	<obstacle x="6" y="14" />
 	<obstacle x="6" y="13" />
@@ -82,11 +83,6 @@
 	<obstacle x="12" y="9" />
 
 	<obstacle x="13" y="14" />
-	<obstacle x="13" y="13" />
-	<obstacle x="13" y="12" />
-	<obstacle x="13" y="11" />
-	<obstacle x="13" y="10" />
-	<obstacle x="13" y="9" />
 
 	<obstacle x="14" y="14" />
 	<obstacle x="14" y="13" />
